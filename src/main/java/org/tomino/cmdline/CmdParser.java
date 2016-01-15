@@ -47,8 +47,8 @@ public class CmdParser {
      */
     public CmdParser(Object impl) throws CmdException {
         this._impl = impl;
-        this._commands = new ArrayList<Command>();
-        this._globalParameters = new ArrayList<GlobalParameter>();
+        this._commands = new ArrayList<>();
+        this._globalParameters = new ArrayList<>();
         initParser(impl.getClass());
     }
 
@@ -98,7 +98,7 @@ public class CmdParser {
         int paramCount = method.getGenericParameterTypes().length;
         Class[] paramTypes = method.getParameterTypes();
         Annotation[][] paramAnnotations = method.getParameterAnnotations();
-        command.Parameters = new ArrayList<Parameter>(paramCount);
+        command.Parameters = new ArrayList<>(paramCount);
         for (int i = 0; i < paramCount; i++) {
             command.Parameters.add(this.createParameterForCommand(paramTypes[i], paramAnnotations[i]));
         }
@@ -187,6 +187,7 @@ public class CmdParser {
         }
         catch (CmdException e) {
             System.err.printf("Invalid command: %s (%s)%n", e.getMessage(), e.getInvalidArgument());
+            System.err.printf("ErrorCode=%s, Argument=%s%n", e.getErrorCode().toString(), e.getInvalidArgument());
         }
     }
 
@@ -198,8 +199,8 @@ public class CmdParser {
     public void dispatch(String[] args)
             throws CmdException {
         Command command = null;
-        Map<String, Option> options = new HashMap<String, Option>();
-        ArrayList<String> unnamedOptions = new ArrayList<String>();
+        Map<String, Option> options = new HashMap<>();
+        ArrayList<String> unnamedOptions = new ArrayList<>();
         for (String arg : args) {
             if (arg.startsWith("-")) {
                 // Option
@@ -255,7 +256,7 @@ public class CmdParser {
             }
         }
 
-        ArrayList<Object> commandArgs = new ArrayList<Object>();
+        ArrayList<Object> commandArgs = new ArrayList<>();
         int unnamedIndex = 0;
         for (Parameter parameter : command.Parameters) {
             Object value;
